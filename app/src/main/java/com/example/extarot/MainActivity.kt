@@ -41,7 +41,6 @@ fun MainScreen() {
 
         Button(onClick = {
             // 카드 뽑기 화면으로 이동하는 코드를 여기에 작성하세요.
-            // 테스트 냥냥
         }) {
             Text(
                 text = "타로 카드 뽑기",
