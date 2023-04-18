@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ExTarot</string>
+    <string name="shuffle">카드 섞기</string>
+    <string name="tarot_deck">카드 뭉치</string>
 </resources>
