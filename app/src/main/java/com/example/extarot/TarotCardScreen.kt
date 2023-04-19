@@ -1,6 +1,13 @@
 package com.example.extarot
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateValue
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +32,9 @@ import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,12 +47,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.animation.core.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 
 @Composable
 fun TarotCardScreen() {
@@ -58,12 +62,12 @@ fun TarotCardScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                TarotDeck(isDarkTheme, 78, 200.dp, 2.dp, onShuffle = { shuffle.value = !shuffle.value })
+                TarotDeck(isDarkTheme, 78, 200.dp, 2.dp)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ShuffleButton(isDarkTheme) {
-                    shuffle.value = !shuffle.value
+                    shuffle.value = true
                 }
             }
         }
@@ -72,27 +76,31 @@ fun TarotCardScreen() {
 
 
 
+
+
 @Composable
-fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: Dp, cardGap: Dp, onShuffle: () -> Unit) {
+fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: Dp, cardGap: Dp) {
     val cardBackImage = painterResource(R.drawable.card_back)
-    val cornerRadius = 24.dp
-    val rotationStateList = remember { mutableStateListOf(*Array(maxCards) { getRandomAngle() }) }
-    val translationStateList = remember { mutableStateListOf(*Array(maxCards) { getRandomTranslation() }) }
+    val cornerRadius = 64.dp
+    val rotationStateList = remember { List(maxCards) { mutableStateOf(getRandomAngle()) } }
+    val translationStateList = remember { List(maxCards) { mutableStateOf(getRandomTranslation()) } }
 
     val infiniteTransition = rememberInfiniteTransition()
-    val shuffleTrigger by infiniteTransition.animateInt(
+    val shuffleTrigger by infiniteTransition.animateValue(
         initialValue = 0,
         targetValue = 1,
+        typeConverter = Int.VectorConverter,
         animationSpec = infiniteRepeatable(
             animation = tween(500, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         )
     )
 
+
     fun shuffleDeck() {
         rotationStateList.indices.forEach { index ->
-            rotationStateList[index] = getRandomAngle()
-            translationStateList[index] = getRandomTranslation()
+            rotationStateList[index].value = getRandomAngle()
+            translationStateList[index].value = getRandomTranslation()
         }
     }
 
@@ -101,8 +109,10 @@ fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: Dp, cardGap: Dp, on
         contentAlignment = Alignment.Center
     ) {
         repeat(maxCards) { index ->
-            val angle by remember { rotationStateList[index] }
-            val (translationX, translationY) by remember { translationStateList[index] }
+            val angle by rotationStateList[index]
+            val translation by translationStateList[index]
+            val translationX = translation.first
+            val translationY = translation.second
 
             Image(
                 painter = cardBackImage,
@@ -119,10 +129,14 @@ fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: Dp, cardGap: Dp, on
         }
     }
 
-    LaunchedEffect(shuffleTrigger) {
-        onShuffle()
+    LaunchedEffect(shuffle) {
+        if (shuffle.value) {
+            shuffleDeck()
+            shuffle.value = false
+        }
     }
 }
+
 
 @Composable
 fun ShuffleButton(isDarkTheme: Boolean, onClick: () -> Unit) {
