@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,11 +35,19 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.animation.core.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @Composable
 fun TarotCardScreen() {
     val isDarkTheme = isSystemInDarkTheme()
+    val shuffle = remember { mutableStateOf(false) }
 
     MaterialTheme(
         colors = if (isDarkTheme) darkColors() else lightColors()
@@ -49,45 +58,74 @@ fun TarotCardScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                TarotDeck(isDarkTheme, 78, 200.dp, 2.dp) // 간격 조정
+                TarotDeck(isDarkTheme, 78, 200.dp, 2.dp, onShuffle = { shuffle.value = !shuffle.value })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ShuffleButton(isDarkTheme)
+                ShuffleButton(isDarkTheme) {
+                    shuffle.value = !shuffle.value
+                }
             }
         }
     }
 }
 
+
+
 @Composable
-fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: androidx.compose.ui.unit.Dp, cardGap: androidx.compose.ui.unit.Dp) {
+fun TarotDeck(isDarkTheme: Boolean, maxCards: Int, cardSize: Dp, cardGap: Dp, onShuffle: () -> Unit) {
+    val cardBackImage = painterResource(R.drawable.card_back)
+    val cornerRadius = 24.dp
+    val rotationStateList = remember { mutableStateListOf(*Array(maxCards) { getRandomAngle() }) }
+    val translationStateList = remember { mutableStateListOf(*Array(maxCards) { getRandomTranslation() }) }
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val shuffleTrigger by infiniteTransition.animateInt(
+        initialValue = 0,
+        targetValue = 1,
+        animationSpec = infiniteRepeatable(
+            animation = tween(500, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    fun shuffleDeck() {
+        rotationStateList.indices.forEach { index ->
+            rotationStateList[index] = getRandomAngle()
+            translationStateList[index] = getRandomTranslation()
+        }
+    }
+
     Box(
         modifier = Modifier.size(cardSize),
         contentAlignment = Alignment.Center
     ) {
-        val cardBackImage = painterResource(R.drawable.card_back)
-
         repeat(maxCards) { index ->
+            val angle by remember { rotationStateList[index] }
+            val (translationX, translationY) by remember { translationStateList[index] }
+
             Image(
                 painter = cardBackImage,
                 contentDescription = stringResource(R.string.tarot_deck),
                 modifier = Modifier
                     .graphicsLayer(
-                        translationX = (index * cardGap.value),
-                        translationY = (index * cardGap.value)
+                        translationX = translationX.value,
+                        translationY = translationY.value,
+                        rotationZ = angle
                     )
                     .size(cardSize)
-                    .clip(RoundedCornerShape(70.dp)) // 각 모서리 둥글게 처리
+                    .clip(RoundedCornerShape(cornerRadius))
             )
         }
     }
+
+    LaunchedEffect(shuffleTrigger) {
+        onShuffle()
+    }
 }
 
-
-
-
 @Composable
-fun ShuffleButton(isDarkTheme: Boolean) {
+fun ShuffleButton(isDarkTheme: Boolean, onClick: () -> Unit) {
     val icon: ImageVector = Icons.Outlined.Shuffle
     val shuffleString: String = stringResource(R.string.shuffle)
 
@@ -95,7 +133,7 @@ fun ShuffleButton(isDarkTheme: Boolean) {
     val contentColor = if (isDarkTheme) Color.White else MaterialTheme.colors.onBackground
 
     Button(
-        onClick = { /* TODO: 카드 섞기 애니메이션 코드 작성 */ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
         contentPadding = PaddingValues(16.dp)
     ) {
@@ -104,7 +142,6 @@ fun ShuffleButton(isDarkTheme: Boolean) {
             contentDescription = null,
             tint = contentColor,
             modifier = Modifier.padding(end = 8.dp)
-
         )
 
         Text(
@@ -134,8 +171,8 @@ private fun getRandomAngle(): Float {
     return (-5..5).random().toFloat()
 }
 
-private fun getRandomTranslation(): Pair<Float, Float> {
-    val x = (-10..10).random().toFloat()
-    val y = (-10..10).random().toFloat()
+private fun getRandomTranslation(): Pair<Dp, Dp> {
+    val x = (-10..10).random().dp
+    val y = (-10..10).random().dp
     return Pair(x, y)
 }
