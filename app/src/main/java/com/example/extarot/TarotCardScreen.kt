@@ -1,12 +1,8 @@
 package com.example.extarot
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +44,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.random.Random
+
+data class CardPosition(val rotation: Float, val translationX: Dp, val translationY: Dp)
 
 @Composable
 fun TarotCardScreen() {
@@ -90,6 +89,8 @@ fun TarotDeck(
     val cornerRadius = 64.dp
     val rotationStateList = remember { List(maxCards) { mutableStateOf(getRandomAngle()) } }
     val translationStateList = remember { List(maxCards) { mutableStateOf(getRandomTranslation()) } }
+    val liftedCardIndices = remember { mutableStateOf(listOf<Int>()) }
+    val liftedCardHeightList = remember { List(maxCards) { mutableStateOf(0.dp) } }
 
     val duration = 3000
 
@@ -97,6 +98,10 @@ fun TarotDeck(
         rotationStateList.indices.forEach { index ->
             rotationStateList[index].value = getRandomAngle()
             translationStateList[index].value = getRandomTranslation()
+        }
+        liftedCardIndices.value = generateRandomIndices(maxCards / 4, maxCards)
+        liftedCardIndices.value.forEach { index ->
+            liftedCardHeightList[index].value = 30.dp
         }
     }
 
@@ -135,6 +140,10 @@ fun TarotDeck(
             )
         }
     }
+}
+
+private fun generateRandomIndices(numberOfIndices: Int, maxIndex: Int): List<Int> {
+    return (0 until maxIndex).shuffled().take(numberOfIndices)
 }
 
 @Composable
