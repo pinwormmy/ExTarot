@@ -139,8 +139,6 @@ fun TarotDeck(
         }
     }
 
-
-
     Box(
         modifier = Modifier.size(cardSize),
         contentAlignment = Alignment.Center
@@ -159,16 +157,12 @@ fun TarotDeck(
                         rotationZ = rotationStateList[index].value,
                         translationX = translationX
                     )
-                    // zIndex를 추가하여 카드 순서를 제어합니다.
                     .zIndex((maxCards - index).toFloat())
                     .size(cardSize)
                     .clip(RoundedCornerShape(cornerRadius))
             )
         }
     }
-
-
-
 }
 
 @Composable
@@ -203,4 +197,3 @@ fun ShuffleButton(isDarkTheme: Boolean, isShuffling: MutableState<Boolean>, onCl
 private fun getRandomAngle(): Float {
     return (-5..5).random().toFloat()
 }
-
