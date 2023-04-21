@@ -89,7 +89,7 @@ fun TarotDeck(
     val rotationStateList = remember { MutableList(maxCards) { mutableStateOf(getRandomAngle()) } }
 
     val duration = 300
-    val delayBetweenIterations = 500
+    val delayBetweenIterations = 350
 
     // Calculate split index
     val splitIndex = (maxCards * 0.5).toInt()
