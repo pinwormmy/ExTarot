@@ -1,6 +1,5 @@
 package com.example.extarot
 
-import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -40,11 +39,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
-import kotlin.random.Random
 
 data class CardPosition(val rotation: Float, val translationX: Dp, val translationY: Dp)
 
@@ -87,63 +85,90 @@ fun TarotDeck(
 ) {
     val cardBackImage = painterResource(R.drawable.card_back)
     val cornerRadius = 64.dp
-    val rotationStateList = remember { List(maxCards) { mutableStateOf(getRandomAngle()) } }
-    val translationStateList = remember { List(maxCards) { mutableStateOf(getRandomTranslation()) } }
-    val liftedCardIndices = remember { mutableStateOf(listOf<Int>()) }
-    val liftedCardHeightList = remember { List(maxCards) { mutableStateOf(0.dp) } }
+    val translationStateList = remember { MutableList(maxCards) { mutableStateOf(0.dp) } }
+    val rotationStateList = remember { MutableList(maxCards) { mutableStateOf(getRandomAngle()) } }
 
-    val duration = 3000
+    val duration = 300
+    val delayBetweenIterations = 500
+
+    // Calculate split index
+    val splitIndex = (maxCards * 0.5).toInt()
 
     fun shuffleDeck() {
-        rotationStateList.indices.forEach { index ->
-            rotationStateList[index].value = getRandomAngle()
-            translationStateList[index].value = getRandomTranslation()
+        val targetTranslation = 600.dp
+
+        (0 until splitIndex).forEach { index ->
+            translationStateList[index].value = 0.dp
         }
-        liftedCardIndices.value = generateRandomIndices(maxCards / 4, maxCards)
-        liftedCardIndices.value.forEach { index ->
-            liftedCardHeightList[index].value = 30.dp
+
+        (splitIndex until maxCards).forEach { index ->
+            translationStateList[index].value = targetTranslation
         }
     }
 
     LaunchedEffect(shuffle.value) {
         if (shuffle.value) {
-            shuffleDeck()
-            delay(duration.toLong())
+            // 전체 동작을 3번 반복
+            repeat(3) {
+                shuffleDeck()
+                delay(duration.toLong())
+
+                // 원래 위치로 되돌리는 코드 수정 (한장씩 연속해서 되돌리기)
+                for (index in splitIndex until maxCards) {
+                    translationStateList[index].value = 0.dp
+                    delay(10) // 카드 한 장씩 이동하는데 10ms 간격
+                }
+
+                // 카드 뭉치의 앞쪽으로 이동하는 코드 추가
+                val movedCardIndices = (splitIndex until maxCards).toList()
+                movedCardIndices.forEach { index ->
+                    rotationStateList.removeAt(index)
+                    rotationStateList.add(0, mutableStateOf(getRandomAngle()))
+                    translationStateList.removeAt(index)
+                    translationStateList.add(0, mutableStateOf(0.dp))
+                }
+
+                // 각 반복 사이에 텀을 둡니다.
+                if (it < 2) {
+                    delay(delayBetweenIterations.toLong())
+                }
+            }
+
             shuffle.value = false
             isShuffling.value = false
         }
     }
 
+
+
     Box(
         modifier = Modifier.size(cardSize),
         contentAlignment = Alignment.Center
     ) {
-        repeat(maxCards) { index ->
-            val targetAngle = rotationStateList[index].value
-            val angle by animateFloatAsState(targetValue = targetAngle, animationSpec = tween(duration))
-
-            val targetTranslation = translationStateList[index].value
-            val translationX by animateFloatAsState(targetValue = targetTranslation.first.value, animationSpec = tween(duration))
-            val translationY by animateFloatAsState(targetValue = targetTranslation.second.value, animationSpec = tween(duration))
+        (0 until maxCards).reversed().forEach { index ->
+            val translationX by animateFloatAsState(
+                targetValue = translationStateList[index].value.value,
+                animationSpec = tween(duration)
+            )
 
             Image(
                 painter = cardBackImage,
                 contentDescription = stringResource(R.string.tarot_deck),
                 modifier = Modifier
                     .graphicsLayer(
-                        translationX = translationX,
-                        translationY = translationY,
-                        rotationZ = angle
+                        rotationZ = rotationStateList[index].value,
+                        translationX = translationX
                     )
+                    // zIndex를 추가하여 카드 순서를 제어합니다.
+                    .zIndex((maxCards - index).toFloat())
                     .size(cardSize)
                     .clip(RoundedCornerShape(cornerRadius))
             )
         }
     }
-}
 
-private fun generateRandomIndices(numberOfIndices: Int, maxIndex: Int): List<Int> {
-    return (0 until maxIndex).shuffled().take(numberOfIndices)
+
+
 }
 
 @Composable
@@ -175,29 +200,7 @@ fun ShuffleButton(isDarkTheme: Boolean, isShuffling: MutableState<Boolean>, onCl
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun LightPreview() {
-    MaterialTheme {
-        TarotCardScreen()
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DarkPreview() {
-    MaterialTheme(darkColors()) {
-        TarotCardScreen()
-    }
-}
-
 private fun getRandomAngle(): Float {
     return (-5..5).random().toFloat()
 }
 
-private fun getRandomTranslation(): Pair<Dp, Dp> {
-    val x = (-10..10).random().dp
-    val y = (-10..10).random().dp
-    return Pair(x, y)
-}
