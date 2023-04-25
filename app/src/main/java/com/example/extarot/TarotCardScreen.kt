@@ -23,6 +23,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -109,6 +110,7 @@ fun TarotDeck(
 ) {
     val cardBackImage = painterResource(R.drawable.card_back)
     val cornerRadius = 64.dp
+    val maxCards = 78
     val translationStateList = remember { MutableList(maxCards) { mutableStateOf(0.dp) } }
     val rotationStateList = remember { MutableList(maxCards) { mutableStateOf(getRandomAngle()) } }
 
@@ -175,6 +177,13 @@ fun TarotDeck(
 
             val card = cards[index]
 
+            Card(
+                card = card,
+                cardSize = cardSize,
+                cornerRadius = cornerRadius,
+                onClick = { flipCard(index) } // 클릭 가능하도록 추가
+            )
+
             Column(
                 modifier = Modifier
                     .graphicsLayer(
@@ -188,7 +197,6 @@ fun TarotDeck(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Card ${card.id + 1}", color = Color.White) // 카드 레이블 추가
                 Image(
                     painter = painterResource(card.imageResource),
                     contentDescription = stringResource(R.string.tarot_deck),
@@ -198,6 +206,39 @@ fun TarotDeck(
         }
     }
 }
+
+@Composable
+fun Card(
+    card: TarotCard,
+    cardSize: Dp,
+    cornerRadius: Dp,
+    onClick: () -> Unit
+) {
+    val imageResource = if (card.isRevealed) {
+        card.imageResource
+    } else {
+        R.drawable.card_back
+    }
+
+    Column(
+        modifier = Modifier
+            .size(cardSize)
+            .clip(RoundedCornerShape(cornerRadius))
+            .clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        if (card.isRevealed) { // 카드가 뒤집혀졌을 때, 카드 번호를 표시
+            Text("Card ${card.id + 1}", color = Color.White)
+        }
+        Image(
+            painter = painterResource(imageResource),
+            contentDescription = stringResource(R.string.tarot_deck),
+            modifier = Modifier.size(cardSize)
+        )
+    }
+}
+
 
 @Composable
 fun ShuffleButton(isDarkTheme: Boolean, isShuffling: MutableState<Boolean>, onClick: () -> Unit) {
@@ -228,6 +269,33 @@ fun ShuffleButton(isDarkTheme: Boolean, isShuffling: MutableState<Boolean>, onCl
     }
 }
 
+@Composable
+fun DrawCardButton(isDarkTheme: Boolean, onClick: () -> Unit) {
+    val icon: ImageVector = Icons.Outlined.Add
+    val drawCardString: String = stringResource(R.string.draw_card)
+
+    val backgroundColor = if (isDarkTheme) colorResource(id = R.color.purple_500) else Color.White
+    val contentColor = if (isDarkTheme) Color.White else MaterialTheme.colors.onBackground
+
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = contentColor,
+            modifier = Modifier.padding(end = 8.dp)
+        )
+
+        Text(
+            text = drawCardString,
+            color = contentColor
+        )
+    }
+}
+
 private fun getRandomAngle(): Float {
-    return (-5..5).random().toFloat()
+    return (-5 .. 5).random().toFloat()
 }
