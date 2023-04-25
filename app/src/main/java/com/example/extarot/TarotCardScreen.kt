@@ -3,6 +3,7 @@ package com.example.extarot
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,13 +45,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 
-data class CardPosition(val rotation: Float, val translationX: Dp, val translationY: Dp)
+data class TarotCard(val id: Int, val imageResource: Int, val isRevealed: Boolean = false)
+
+fun createTarotDeck(): List<TarotCard> {
+    return List(78) { index ->
+        TarotCard(id = index, imageResource = R.drawable.card_back)
+    }
+}
 
 @Composable
 fun TarotCardScreen() {
     val isDarkTheme = isSystemInDarkTheme()
     val shuffle = remember { mutableStateOf(false) }
     val isShuffling = remember { mutableStateOf(false) }
+    val tarotCards = remember { createTarotDeck() }
+    val shuffledCards = remember { mutableStateOf(tarotCards) }
 
     MaterialTheme(
         colors = if (isDarkTheme) darkColors() else lightColors()
@@ -61,27 +70,42 @@ fun TarotCardScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                TarotDeck(isDarkTheme, 78, 200.dp, 2.dp, shuffle, isShuffling)
+                TarotDeck(
+                    cards = shuffledCards.value,
+                    cardSize = 200.dp,
+                    shuffle = shuffle,
+                    isShuffling = isShuffling,
+                    flipCard = { index ->
+                        val updatedCards = shuffledCards.value.toMutableList()
+                        val currentCard = updatedCards[index]
+                        updatedCards[index] = currentCard.copy(isRevealed = !currentCard.isRevealed)
+                        shuffledCards.value = updatedCards
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 ShuffleButton(isDarkTheme, isShuffling) {
                     shuffle.value = true
                     isShuffling.value = true
+                    shuffledCards.value = shuffleCards(tarotCards)
                 }
             }
         }
     }
 }
 
+fun shuffleCards(cards: List<TarotCard>): List<TarotCard> {
+    return cards.shuffled()
+}
+
 @Composable
 fun TarotDeck(
-    isDarkTheme: Boolean,
-    maxCards: Int,
+    cards: List<TarotCard>,
     cardSize: Dp,
-    cardGap: Dp,
     shuffle: MutableState<Boolean>,
-    isShuffling: MutableState<Boolean>
+    isShuffling: MutableState<Boolean>,
+    flipCard: (Int) -> Unit
 ) {
     val cardBackImage = painterResource(R.drawable.card_back)
     val cornerRadius = 64.dp
@@ -92,7 +116,7 @@ fun TarotDeck(
     val delayBetweenIterations = 350
 
     // Calculate split index
-    val splitIndex = (maxCards * 0.5).toInt()
+    val splitIndex = (maxCards * 0.3).toInt()
 
     fun shuffleDeck() {
         val targetTranslation = 600.dp
@@ -149,9 +173,9 @@ fun TarotDeck(
                 animationSpec = tween(duration)
             )
 
-            Image(
-                painter = cardBackImage,
-                contentDescription = stringResource(R.string.tarot_deck),
+            val card = cards[index]
+
+            Column(
                 modifier = Modifier
                     .graphicsLayer(
                         rotationZ = rotationStateList[index].value,
@@ -160,7 +184,17 @@ fun TarotDeck(
                     .zIndex((maxCards - index).toFloat())
                     .size(cardSize)
                     .clip(RoundedCornerShape(cornerRadius))
-            )
+                    .clickable { flipCard(index) }, // 클릭 가능하도록 추가
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text("Card ${card.id + 1}", color = Color.White) // 카드 레이블 추가
+                Image(
+                    painter = painterResource(card.imageResource),
+                    contentDescription = stringResource(R.string.tarot_deck),
+                    modifier = Modifier.size(cardSize)
+                )
+            }
         }
     }
 }
