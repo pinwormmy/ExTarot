@@ -57,7 +57,8 @@ fun DrawCardsScreen(navController: NavController) {
                             .size(cardSize)
                             .offset(x = animatedOffsetX, y = animatedOffsetY),
                         card = card,
-                        faceUp = false
+                        faceUp = false,
+                        rotate = true
                     )
                 }
             }

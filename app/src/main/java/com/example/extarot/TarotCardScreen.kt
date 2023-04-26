@@ -304,7 +304,7 @@ fun DrawCardButton(isDarkTheme: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean) {
+fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean, rotate: Boolean = false) {
     androidx.compose.material.Card(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
@@ -322,11 +322,12 @@ fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean) {
             Image(
                 painter = painterResource(card.imageResource),
                 contentDescription = stringResource(R.string.tarot_deck),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().let { if (rotate) it.graphicsLayer(rotationZ = 90f) else it }
             )
         }
     }
 }
+
 
 
 
