@@ -21,19 +21,31 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.navigation.NavController
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            MaterialTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(color = MaterialTheme.colors.background) {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "tarot_card_screen") {
+                        composable("tarot_card_screen") { TarotCardScreen(navController) }
+                        composable("draw_cards_screen") { DrawCardsScreen(navController) }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) { // 수정된 부분
     val isDarkTheme = isSystemInDarkTheme()
     val navController = rememberNavController()
 
@@ -64,7 +76,7 @@ fun MainScreen() {
                 }
             }
         }
-        composable("tarot_card_screen") { TarotCardScreen() }
+        composable("tarot_card_screen") { TarotCardScreen(navController) } // 수정된 부분
     }
 }
 

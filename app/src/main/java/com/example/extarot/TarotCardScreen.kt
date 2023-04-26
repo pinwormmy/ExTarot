@@ -43,7 +43,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
 data class TarotCard(val id: Int, val imageResource: Int, val isRevealed: Boolean = false)
@@ -55,8 +57,7 @@ fun createTarotDeck(): List<TarotCard> {
 }
 
 @Composable
-fun TarotCardScreen() {
-    val isDarkTheme = isSystemInDarkTheme()
+fun TarotCardScreen(navController: NavController) {    val isDarkTheme = isSystemInDarkTheme()
     val shuffle = remember { mutableStateOf(false) }
     val isShuffling = remember { mutableStateOf(false) }
     val tarotCards = remember { createTarotDeck() }
@@ -91,6 +92,12 @@ fun TarotCardScreen() {
                     isShuffling.value = true
                     shuffledCards.value = shuffleCards(tarotCards)
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                DrawCardButton(isDarkTheme) {
+                    navController.navigate("draw_cards_screen")
+                }
             }
         }
     }
@@ -115,10 +122,10 @@ fun TarotDeck(
     val rotationStateList = remember { MutableList(maxCards) { mutableStateOf(getRandomAngle()) } }
 
     val duration = 300
-    val delayBetweenIterations = 350
+    val delayBetweenIterations = 310
 
     // Calculate split index
-    val splitIndex = (maxCards * 0.3).toInt()
+    val splitIndex = (maxCards * 0.8).toInt()
 
     fun shuffleDeck() {
         val targetTranslation = 600.dp
@@ -295,6 +302,33 @@ fun DrawCardButton(isDarkTheme: Boolean, onClick: () -> Unit) {
         )
     }
 }
+
+@Composable
+fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean) {
+    androidx.compose.material.Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        backgroundColor = Color.DarkGray
+    ) {
+        if (faceUp) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(card.id.toString(), fontSize = 20.sp)
+            }
+        } else {
+            Image(
+                painter = painterResource(card.imageResource),
+                contentDescription = stringResource(R.string.tarot_deck),
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+
 
 private fun getRandomAngle(): Float {
     return (-5 .. 5).random().toFloat()
