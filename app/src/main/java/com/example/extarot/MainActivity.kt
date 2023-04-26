@@ -3,38 +3,40 @@ package com.example.extarot
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.navigation.NavController
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                // A surface container using the 'background' color from the theme
+            val isDarkTheme = isSystemInDarkTheme()
+            val colors = if (isDarkTheme) {
+                darkColors()
+            } else {
+                lightColors()
+            }
+
+            MaterialTheme(colors = colors) {
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "tarot_card_screen") {
+                    NavHost(navController = navController, startDestination = "main_screen") {
+                        composable("main_screen") { MainScreen(navController) }
                         composable("tarot_card_screen") { TarotCardScreen(navController) }
                         composable("draw_cards_screen") { DrawCardsScreen(navController) }
                     }
@@ -45,39 +47,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(navController: NavController) { // 수정된 부분
-    val isDarkTheme = isSystemInDarkTheme()
-    val navController = rememberNavController()
+fun MainScreen(navController: NavController) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "ExTarot",
+                fontSize = 50.sp,
+                color = MaterialTheme.colors.onBackground
+            )
 
-    NavHost(navController = navController, startDestination = "main_screen") {
-        composable("main_screen") {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "ExTarot",
-                        fontSize = 50.sp,
-                        color = if (isDarkTheme) Color.White else Color.Black
-                    )
+            Spacer(modifier = Modifier.height(32.dp))
 
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Button(onClick = { navController.navigate("tarot_card_screen") }) {
-                        Text(
-                            text = "타로 카드 뽑기",
-                            color = if (isDarkTheme) Color.White else Color.Black
-                        )
-                    }
-                }
+            Button(onClick = { navController.navigate("tarot_card_screen") }) {
+                Text(
+                    text = "타로 카드 뽑기",
+                    color = MaterialTheme.colors.onPrimary
+                )
             }
         }
-        composable("tarot_card_screen") { TarotCardScreen(navController) } // 수정된 부분
     }
 }
-
-
