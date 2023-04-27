@@ -247,7 +247,6 @@ fun Card(
     }
 }
 
-
 @Composable
 fun ShuffleButton(isDarkTheme: Boolean, isShuffling: MutableState<Boolean>, onClick: () -> Unit) {
     val icon: ImageVector = Icons.Outlined.Shuffle
@@ -329,10 +328,6 @@ fun TarotCard(
         )
     }
 }
-
-
-
-
 
 private fun getRandomAngle(): Float {
     return (-5 .. 5).random().toFloat()
