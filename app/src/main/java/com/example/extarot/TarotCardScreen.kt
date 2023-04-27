@@ -305,7 +305,12 @@ fun DrawCardButton(isDarkTheme: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean, rotate: Boolean = false) {
+fun TarotCard(
+    modifier: Modifier = Modifier,
+    card: TarotCard,
+    faceUp: Boolean = true,
+    rotate: Boolean = false
+) {
     if (faceUp) {
         Column(
             modifier = modifier.fillMaxSize(),
