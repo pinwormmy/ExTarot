@@ -18,50 +18,38 @@ import kotlinx.coroutines.delay
 fun DrawCardsScreen(navController: NavController) {
     val cards = remember { shuffleCards(createTarotDeck()) }
     val columns = 2
-    val rows = cards.size / columns
-    val cardSize = 150.dp
+    val cardSize = 185.dp
+    val cardSpacing = 15.dp
+    val totalCardsPerColumn = cards.size / columns
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        contentAlignment = Alignment.TopStart // 좌측 상단부터 시작
     ) {
-        for (row in 0 until rows) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                for (column in 0 until columns) {
-                    val cardIndex = row * columns + column
-                    val card = cards[cardIndex]
-                    val offsetX = remember { mutableStateOf(300.dp) }
-                    val offsetY = remember { mutableStateOf(-300.dp) }
+        cards.forEachIndexed { index, card ->
+            val offsetX = if (index < totalCardsPerColumn) 0.dp else cardSize + cardSpacing
+            val initialOffsetX = remember { mutableStateOf(300.dp) }
+            val offsetY = remember { mutableStateOf(-300.dp) }
 
-                    LaunchedEffect(key1 = cardIndex) {
-                        delay(50L * cardIndex)
-                        offsetX.value = 0.dp
-                        offsetY.value = 0.dp
-                    }
-
-                    val animatedOffsetX by animateDpAsState(
-                        targetValue = offsetX.value,
-                        animationSpec = spring(dampingRatio = 0.8f, stiffness = 300f)
-                    )
-                    val animatedOffsetY by animateDpAsState(
-                        targetValue = offsetY.value,
-                        animationSpec = spring(dampingRatio = 0.8f, stiffness = 300f)
-                    )
-
-                    TarotCard(
-                        modifier = Modifier
-                            .size(cardSize)
-                            .offset(x = animatedOffsetX, y = animatedOffsetY),
-                        card = card,
-                        faceUp = false,
-                        rotate = true
-                    )
-                }
+            LaunchedEffect(key1 = index) {
+                delay(50L * index)
+                offsetY.value = ((index % totalCardsPerColumn) * 15).dp // 카드 간격 조정
+                initialOffsetX.value = 0.dp // 애니메이션 시작 위치 수정
             }
+
+            val animatedOffsetY by animateDpAsState(
+                targetValue = offsetY.value,
+                animationSpec = spring(dampingRatio = 0.8f, stiffness = 300f)
+            )
+
+            TarotCard(
+                modifier = Modifier
+                    .size(cardSize)
+                    .offset(x = offsetX + initialOffsetX.value, y = animatedOffsetY),
+                card = card,
+                faceUp = false,
+                rotate = true // 가로로 돌린 상태를 유지
+            )
         }
     }
 }

@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -305,28 +306,25 @@ fun DrawCardButton(isDarkTheme: Boolean, onClick: () -> Unit) {
 
 @Composable
 fun TarotCard(modifier: Modifier = Modifier, card: TarotCard, faceUp: Boolean, rotate: Boolean = false) {
-    androidx.compose.material.Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color.DarkGray
-    ) {
-        if (faceUp) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(card.id.toString(), fontSize = 20.sp)
-            }
-        } else {
-            Image(
-                painter = painterResource(card.imageResource),
-                contentDescription = stringResource(R.string.tarot_deck),
-                modifier = Modifier.fillMaxSize().let { if (rotate) it.graphicsLayer(rotationZ = 90f) else it }
-            )
+    if (faceUp) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(card.id.toString(), fontSize = 20.sp)
         }
+    } else {
+        Image(
+            painter = painterResource(card.imageResource),
+            contentDescription = stringResource(R.string.tarot_deck),
+            modifier = modifier
+                .fillMaxSize()
+                .let { if (rotate) it.rotate(90F) else it }
+        )
     }
 }
+
 
 
 
