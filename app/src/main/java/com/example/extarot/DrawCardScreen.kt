@@ -27,7 +27,7 @@ fun DrawCardsScreen(navController: NavController) {
     val cardSpacing = 15.dp
     val totalCardsPerColumn = cards.size / columns
     val selectedCard = remember { mutableStateOf<TarotCard?>(null) }
-    val cornerRadius = 16.dp
+    val cornerRadius = 56.dp
 
     Box(
         modifier = Modifier.fillMaxSize(),

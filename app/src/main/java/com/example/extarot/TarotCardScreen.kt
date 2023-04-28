@@ -216,7 +216,7 @@ fun TarotDeck(
 }
 
 @Composable
-fun Card(
+fun Card( // 리팩토링하다 개판나서 다시 롤백함. 하루 시간 다 날림...거지같네...
     card: TarotCard,
     cardSize: Dp,
     cornerRadius: Dp,
