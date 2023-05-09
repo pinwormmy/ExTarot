@@ -1,7 +1,10 @@
 package com.example.extarot
 
+import com.example.extarot.TarotCard
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -17,9 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
+
 
 @Composable
 fun DrawCardsScreen(navController: NavController) {
@@ -55,16 +60,21 @@ fun DrawCardsScreen(navController: NavController) {
                 targetValue = if (isSelected && cardOutAnimation.value) (-1000).dp else offsetX
             )
 
+            val rotationDegrees = if (isSelected) 30f else 0f
+            val animatedRotation by animateFloatAsState(targetValue = rotationDegrees)
+
             Box(
                 modifier = Modifier
                     .size(cardSize)
                     .offset(x = animatedOffsetX, y = animatedOffsetY)
                     .clip(RoundedCornerShape(cornerRadius)) // 이미지 모서리 곡선 적용
+                    .clickable { selectedCard.value = if (selectedCard.value == card) null else card } // 카드 선택 구현
             ) {
-                TarotCard(
+                TarotCard( // 이 부분을 수정하세요. TarotCard 대신 TarotCardData 사용
                     modifier = Modifier
-                        .size(cardSize),
-                    card = card,
+                        .size(cardSize)
+                        .rotate(animatedRotation), // 기울어지는 효과 추가
+                    cardData = card, // card 파라미터를 cardData로 전달
                     faceUp = false,
                     rotate = true
                 )
@@ -73,13 +83,16 @@ fun DrawCardsScreen(navController: NavController) {
 
         if (selectedCard.value != null) {
             Button(
-                onClick = { cardOutAnimation.value = true },
-                modifier = Modifier.align(Alignment.BottomCenter)
+                onClick = {
+                    navController.navigate("fullScreenCard/${selectedCard.value?.id}")
+                }
             ) {
-                Text("이 카드로 하시겠습니까?")
+                Text(text = "이 카드로 하시겠습니까?")
             }
         }
     }
 }
+
+
 
 
