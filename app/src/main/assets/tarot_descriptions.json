@@ -1,0 +1,44 @@
+{
+  "cards": [
+    {
+      "id": 0,
+      "name": "The Fool",
+      "description": "처음 시작, 순진, 무모함"
+    },
+    {
+      "id": 1,
+      "name": "The Magician",
+      "description": "창조력, 자기 표현, 기술"
+    },
+    {
+      "id": 2,
+      "name": "The High Priestess",
+      "description": "지혜, 비밀, 직관"
+    },
+    {
+      "id": 3,
+      "name": "The Empress",
+      "description": "모성, 충만, 성장"
+    },
+    {
+      "id": 4,
+      "name": "The Emperor",
+      "description": "권위, 지도력, 질서"
+    },
+    {
+      "id": 75,
+      "name": "Knight of Cups",
+      "description": "로맨틱, 환상, 이상주의"
+    },
+    {
+      "id": 76,
+      "name": "Queen of Cups",
+      "description": "친절, 공감, 사려 깊음"
+    },
+    {
+      "id": 77,
+      "name": "King of Cups",
+      "description": "감성적 지도력, 친절, 사려 깊음"
+    }
+  ]
+}

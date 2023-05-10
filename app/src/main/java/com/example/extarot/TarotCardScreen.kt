@@ -49,18 +49,6 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
-data class TarotCard(
-    val id: Int,
-    val imageResource: Int,
-    val isRevealed: Boolean = false
-)
-
-fun createTarotDeck(): List<TarotCard> {
-    return List(78) { index ->
-        TarotCard(id = index, imageResource = R.drawable.card_back)
-    }
-}
-
 @Composable
 fun TarotCardScreen(navController: NavController) {    val isDarkTheme = isSystemInDarkTheme()
     val shuffle = remember { mutableStateOf(false) }
@@ -240,8 +228,9 @@ fun Card(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (card.isRevealed) { // 카드가 뒤집혀졌을 때, 카드 번호를 표시
-            Text("Card ${card.id + 1}", color = Color.White)
+        if (card.isRevealed) { // 카드가 뒤집혀졌을 때, 카드 이름과 설명을 표시
+            Text(card.name, color = Color.White)
+            Text(card.description, color = Color.White)
         }
         Image(
             painter = painterResource(imageResource),
