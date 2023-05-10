@@ -26,8 +26,8 @@ fun CardDetailScreen(card: TarotCard) {
     ) {
         Box(
             modifier = Modifier
-                .size(200.dp)
-                .clip(RoundedCornerShape(16.dp)) // CircleShape 대신 RoundedCornerShape를 사용하였습니다.
+                .size(500.dp)
+                .clip(RoundedCornerShape(84.dp)) // CircleShape 대신 RoundedCornerShape를 사용하였습니다.
                 .clickable { isRevealed = !isRevealed }
         ) {
             if (!isRevealed) {
