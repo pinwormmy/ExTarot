@@ -49,7 +49,11 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
-data class TarotCard(val id: Int, val imageResource: Int, val isRevealed: Boolean = false)
+data class TarotCard(
+    val id: Int,
+    val imageResource: Int,
+    val isRevealed: Boolean = false
+)
 
 fun createTarotDeck(): List<TarotCard> {
     return List(78) { index ->
@@ -216,7 +220,7 @@ fun TarotDeck(
 }
 
 @Composable
-fun Card( // 리팩토링하다 개판나서 다시 롤백함. 하루 시간 다 날림...거지같네...
+fun Card(
     card: TarotCard,
     cardSize: Dp,
     cornerRadius: Dp,

@@ -82,12 +82,22 @@ fun DrawCardsScreen(navController: NavController) {
 
         if (selectedCard.value != null) {
             Button(
-                onClick = { cardOutAnimation.value = true },
+                onClick = {
+                    cardOutAnimation.value = true
+                },
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 Text("이 카드로 하시겠습니까?")
             }
+
+            LaunchedEffect(cardOutAnimation.value) {
+                if (cardOutAnimation.value) {
+                    delay(1000L) // 카드 이동 애니메이션이 끝날 때까지 기다립니다.
+                    navController.navigate("card_detail/${selectedCard.value!!.id}") // 선택된 카드의 세부 정보 화면으로 이동합니다.
+                }
+            }
         }
+
     }
 }
 

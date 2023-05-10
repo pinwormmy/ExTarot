@@ -39,6 +39,15 @@ class MainActivity : ComponentActivity() {
                         composable("main_screen") { MainScreen(navController) }
                         composable("tarot_card_screen") { TarotCardScreen(navController) }
                         composable("draw_cards_screen") { DrawCardsScreen(navController) }
+                        composable("card_detail/{cardId}") { backStackEntry ->
+                            val cardId = backStackEntry.arguments?.getString("cardId")?.toIntOrNull()
+                            val card = createTarotDeck().find { it.id == cardId }
+                            if (card != null) {
+                                CardDetailScreen(card)
+                            } else {
+                                // cardId가 잘못되었거나 카드를 찾을 수 없을 때 처리를 여기에 추가합니다.
+                            }
+                        }
                     }
                 }
             }
