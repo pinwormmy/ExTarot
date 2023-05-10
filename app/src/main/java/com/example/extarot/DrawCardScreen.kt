@@ -1,6 +1,5 @@
 package com.example.extarot
 
-import com.example.extarot.TarotCard
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -70,11 +69,11 @@ fun DrawCardsScreen(navController: NavController) {
                     .clip(RoundedCornerShape(cornerRadius)) // 이미지 모서리 곡선 적용
                     .clickable { selectedCard.value = if (selectedCard.value == card) null else card } // 카드 선택 구현
             ) {
-                TarotCard( // 이 부분을 수정하세요. TarotCard 대신 TarotCardData 사용
+                TarotCard(
                     modifier = Modifier
                         .size(cardSize)
                         .rotate(animatedRotation), // 기울어지는 효과 추가
-                    cardData = card, // card 파라미터를 cardData로 전달
+                    card = card,
                     faceUp = false,
                     rotate = true
                 )
@@ -83,11 +82,10 @@ fun DrawCardsScreen(navController: NavController) {
 
         if (selectedCard.value != null) {
             Button(
-                onClick = {
-                    navController.navigate("fullScreenCard/${selectedCard.value?.id}")
-                }
+                onClick = { cardOutAnimation.value = true },
+                modifier = Modifier.align(Alignment.BottomCenter)
             ) {
-                Text(text = "이 카드로 하시겠습니까?")
+                Text("이 카드로 하시겠습니까?")
             }
         }
     }
