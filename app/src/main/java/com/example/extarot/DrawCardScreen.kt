@@ -42,7 +42,7 @@ fun DrawCardsScreen(navController: NavController) {
     ) {
         cards.forEachIndexed { index, card ->
             val offsetX = if (index < totalCardsPerColumn) 0.dp else cardSize + cardSpacing
-            val offsetY = remember { mutableStateOf(-300.dp) }
+            val offsetY = remember { mutableStateOf((-300).dp) }
 
             LaunchedEffect(key1 = index) {
                 delay(50L * index)

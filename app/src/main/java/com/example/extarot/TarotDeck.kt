@@ -14,14 +14,13 @@ data class TarotCard(
     val isRevealed: Boolean = false
 )
 
-suspend fun loadTarotDeck(context: Context): List<TarotCard> {
-    val json = context.assets.open("tarot_cards.json").bufferedReader().use { it.readText() }
-    return Json.decodeFromString<List<TarotCard>>(json)
-}
-
 fun createTarotDeck(): List<TarotCard> {
     return List(78) { index ->
         TarotCard(id = index, imageResource = R.drawable.card_back, name = "", description = "")
     }
 }
 
+fun loadTarotDeck(context: Context): List<TarotCard> {
+    val json = context.assets.open("tarot_cards.json").bufferedReader().use { it.readText() }
+    return Json.decodeFromString<List<TarotCard>>(json)
+}

@@ -108,7 +108,6 @@ fun TarotDeck(
     isShuffling: MutableState<Boolean>,
     flipCard: (Int) -> Unit
 ) {
-    val cardBackImage = painterResource(R.drawable.card_back)
     val cornerRadius = 64.dp
     val maxCards = 78
     val translationStateList = remember { MutableList(maxCards) { mutableStateOf(0.dp) } }

@@ -26,19 +26,369 @@
       "description": "권위, 지도력, 질서"
     },
     {
+      "id": 5,
+      "name": "The Hierophant",
+      "description": "중재, 인도, 반성"
+    },
+    {
+      "id": 6,
+      "name": "The Lovers",
+      "description": "친밀성, 성적임, 정열"
+    },
+    {
+      "id": 7,
+      "name": "The Chariot",
+      "description": "열정, 갈망, 의지"
+    },
+    {
+      "id": 8,
+      "name": "The Strength",
+      "description": "신념, 믿음, 정신력"
+    },
+    {
+      "id": 9,
+      "name": "The Hermit",
+      "description": "지혜, 해답, 양심"
+    },
+    {
+      "id": 10,
+      "name": "The Wheel Of Fortune",
+      "description": "양면성, 회귀, 변화"
+    },
+    {
+      "id": 11,
+      "name": "Justice",
+      "description": "균형, 조화, 정리"
+    },
+    {
+      "id": 12,
+      "name": "The Hanged Man",
+      "description": "권위, 지도력, 질서"
+    },
+    {
+      "id": 13,
+      "name": "DEATH",
+      "description": "불행, 과도기, 받아들임"
+    },
+    {
+      "id": 14,
+      "name": "The TEMPERANCE",
+      "description": "절제, 조화, 관계"
+    },
+    {
+      "id": 15,
+      "name": "The DEVIL",
+      "description": "타락, 실패, 종속"
+    },
+    {
+      "id": 16,
+      "name": "The TOWER",
+      "description": "변화, 위기, 폭로"
+    },
+    {
+      "id": 17,
+      "name": "The STAR",
+      "description": "희망, 믿음, 영감"
+    },
+    {
+      "id": 18,
+      "name": "The MOON",
+      "description": "숨겨진, 불신, 두려움"
+    },
+    {
+      "id": 19,
+      "name": "The SUN",
+      "description": "활기, 행복, 성공"
+    },
+    {
+      "id": 20,
+      "name": "The JUDGEMENT",
+      "description": "심판, 성취, 사랑"
+    },
+    {
+      "id": 21,
+      "name": "The WORLD",
+      "description": "완성, 이동, 성공"
+    },
+    {
+      "id": 22,
+      "name": "Ace of Wands",
+      "description": "새로운 시작, 탄생, 소득"
+    },
+    {
+      "id": 23,
+      "name": "Two of Wands",
+      "description": "성공, 새 계획, 대담한"
+    },
+    {
+      "id": 24,
+      "name": "Three of Wands",
+      "description": "성공, 교류, 수완"
+    },
+    {
+      "id": 25,
+      "name": "Four of Wands",
+      "description": "기쁨, 행복, 승리"
+    },
+    {
+      "id": 26,
+      "name": "Five of Wands",
+      "description": "싸움, 경쟁, 혼란"
+    },
+    {
+      "id": 27,
+      "name": "Six of Wands",
+      "description": "성취, 결과, 보상"
+    },
+    {
+      "id": 28,
+      "name": "Seven of Wands",
+      "description": "자신감, 극복, 힘"
+    },
+    {
+      "id": 29,
+      "name": "Eight of Wands",
+      "description": "변화, 갑작스러움, 빠름"
+    },
+    {
+      "id": 30,
+      "name": "Nine of Wands",
+      "description": "준비, 지킴, 용기"
+    },
+    {
+      "id": 31,
+      "name": "Ten of Wands",
+      "description": "부담, 도전, 스트레스"
+    },
+    {
+      "id": 32,
+      "name": "Page of Wands",
+      "description": "활동적인, 장난기있는, 도움되는"
+    },
+    {
+      "id": 33,
+      "name": "Knight of Wands",
+      "description": "이사, 당장, 맹렬한, 야심찬"
+    },
+    {
+      "id": 34,
+      "name": "Queen of Wands",
+      "description": "정직한, 활동적인, 관대한, 섹시한"
+    },
+    {
+      "id": 35,
+      "name": "King of Wands",
+      "description": "리더, 비상한, 혁신적인"
+    },
+    {
+      "id": 36,
+      "name": "Ace of Cups",
+      "description": "새로운 만남, 모성애, 우호적인"
+    },
+    {
+      "id": 37,
+      "name": "Two of Cups",
+      "description": "사랑의 시작, 동반자 관계, 협동, 남녀의 결합"
+    },
+    {
+      "id": 38,
+      "name": "Three of Cups",
+      "description": "치유, 화해, 타협, 승리"
+    },
+    {
+      "id": 39,
+      "name": "Four of Cups",
+      "description": "권태기, 실증, 지침"
+    },
+    {
+      "id": 40,
+      "name": "Five of Cups",
+      "description": "기대 이하, 부분적 손실, 후회, 헤어짐"
+    },
+    {
+      "id": 41,
+      "name": "Six of Cups",
+      "description": "향수, 과거와 연관, 옛 친구"
+    },
+    {
+      "id": 42,
+      "name": "Seven of Cups",
+      "description": "공상, 과대망상, 사기당하는"
+    },
+    {
+      "id": 43,
+      "name": "Eight of Cups",
+      "description": "포기, 새로운 걸 찾음, 좌천"
+    },
+    {
+      "id": 44,
+      "name": "Nine of Cups",
+      "description": "행복, 부유, 안정, 번영"
+    },
+    {
+      "id": 45,
+      "name": "Ten of Cups",
+      "description": "행복, 평화, 성공"
+    },
+    {
+      "id": 46,
+      "name": "Page of Cups",
+      "description": "새 소식, 임신, 관계회복, 직관력, 수다쟁이"
+    },
+    {
+      "id": 47,
+      "name": "Kight of Cups",
+      "description": "결혼, 좋은 파트너, 초대, 청혼"
+    },
+    {
+      "id": 48,
+      "name": "Queen of Cups",
+      "description": "뛰어난 직감, 통찰력, 헌신적, 자비"
+    },
+    {
+      "id": 49,
+      "name": "King of Cups",
+      "description": "관대한, 즐기는, 우유부단한"
+    },
+    {
+      "id": 50,
+      "name": "Ace of Swords",
+      "description": "성공, 주도권, 극복, 냉철함"
+    },
+    {
+      "id": 51,
+      "name": "Two of Swords",
+      "description": "불완전, 섣부른, 주저하는"
+    },
+    {
+      "id": 52,
+      "name": "Three of Swords",
+      "description": "고통, 이혼, 균열"
+    },
+    {
+      "id": 53,
+      "name": "Four of Swords",
+      "description": "은둔, 요양, 전략적 후퇴, 회복"
+    },
+    {
+      "id": 54,
+      "name": "Five of Swords",
+      "description": "패배, 취소, 망신"
+    },
+    {
+      "id": 55,
+      "name": "Six of Swords",
+      "description": "여행, 나아지는, 끈기"
+    },
+    {
+      "id": 56,
+      "name": "Seven of Swords",
+      "description": "불안정, 신중, 파악 안 되는"
+    },
+    {
+      "id": 57,
+      "name": "Eight of Swords",
+      "description": "속수무책, 징역, 혼란, 사고, 질병"
+    },
+    {
+      "id": 58,
+      "name": "Nine of Swords",
+      "description": "절망, 이별, 황폐함"
+    },
+    {
+      "id": 59,
+      "name": "Ten of Swords",
+      "description": "고생의 끝, 절망의 끝, 정신분열"
+    },
+    {
+      "id": 60,
+      "name": "Page of Swords",
+      "description": "성급한, 민첩한, 대담한"
+    },
+    {
+      "id": 61,
+      "name": "Knight of Swords",
+      "description": "용맹한, 싸움, 카리스마"
+    },
+    {
+      "id": 62,
+      "name": "Queen of Swords",
+      "description": "집중력, 오기, 완벽주의, 미망인, 이혼"
+    },
+    {
+      "id": 63,
+      "name": "King of Swords",
+      "description": "단호한, 냉철한, 공정한, 박식함"
+    },
+    {
+      "id": 64,
+      "name": "ACE of Pentacles",
+      "description": "번창, 사업 확장, 횡재, 금"
+    },
+    {
+      "id": 65,
+      "name": "Two of Pentacles",
+      "description": "양다리, 약간의 소란, 능수능란"
+    },
+    {
+      "id": 66,
+      "name": "Three of Pentacles",
+      "description": "예술적 재능, 명성, 기획하는"
+    },
+    {
+      "id": 67,
+      "name": "Four of Pentacles",
+      "description": "소유욕, 유산, 집착"
+    },
+    {
+      "id": 68,
+      "name": "Five of Pentacles",
+      "description": "빈곤, 놓침, 때가 아님"
+    },
+    {
+      "id": 69,
+      "name": "Six of Pentacles",
+      "description": "관대함, 기부, 만족"
+    },
+    {
+      "id": 70,
+      "name": "Seven of Pentacles",
+      "description": "재산, 점검, 사업"
+    },
+    {
+      "id": 71,
+      "name": "Eight of Pentacles",
+      "description": "장인, 열심히 하는, 준비 단계"
+    },
+    {
+      "id": 72,
+      "name": "Nine of Pentacles",
+      "description": "부유한, 꿈의 실현, 독립심"
+    },
+    {
+      "id": 73,
+      "name": "Ten of Pentacles",
+      "description": "주거안정, 가족의 도움, 부유한 가정"
+    },
+    {
+      "id": 74,
+      "name": "Page of Pentacles",
+      "description": "재능, 돈 벌 기회, 신중한"
+    },
+    {
       "id": 75,
       "name": "Knight of Cups",
-      "description": "로맨틱, 환상, 이상주의"
+      "description": "부지런한, 주의깊은, 인내심"
     },
     {
       "id": 76,
       "name": "Queen of Cups",
-      "description": "친절, 공감, 사려 깊음"
+      "description": "임신, 자비로운, 번창하는, 재력가"
     },
     {
       "id": 77,
       "name": "King of Cups",
-      "description": "감성적 지도력, 친절, 사려 깊음"
+      "description": "많은 돈, 성공, 끈기, 영리함"
     }
   ]
 }
