@@ -1,6 +1,5 @@
 package com.example.extarot
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,14 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardDetailScreen(cardId: Int, context: Context) {
-    val cardState by produceState<TarotCard?>(initialValue = null) {
-        value = loadTarotDeck(context).find { it.id == cardId }
-    }
+fun CardDetailScreen(cardId: Int, deck: List<TarotCard>) {
+    val card = deck.find { it.id == cardId }
     var isRevealed by remember { mutableStateOf(false) }
     var isOverlayVisible by remember { mutableStateOf(false) }
 
-    val card = cardState
     if (card != null) {
         Box(
             modifier = Modifier

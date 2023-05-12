@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class TarotCard(
     val id: Int,
-    val imageResource: Int,
+    val imageResource: Int = R.drawable.card_back,
     val name: String,
     val description: String,
     val isRevealed: Boolean = false

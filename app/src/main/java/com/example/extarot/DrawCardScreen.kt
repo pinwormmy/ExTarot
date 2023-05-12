@@ -1,5 +1,6 @@
 package com.example.extarot
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -93,7 +94,14 @@ fun DrawCardsScreen(navController: NavController) {
             LaunchedEffect(cardOutAnimation.value) {
                 if (cardOutAnimation.value) {
                     delay(1000L) // 카드 이동 애니메이션이 끝날 때까지 기다립니다.
-                    navController.navigate("card_detail/${selectedCard.value!!.id}") // 선택된 카드의 세부 정보 화면으로 이동합니다.
+                    val cardId = selectedCard.value?.id
+                    if (cardId != null) {
+                        val uri = "card_detail/$cardId"
+                        Log.d("Navigation", "Navigating to $uri")
+                        navController.navigate(uri)
+                    } else {
+                        Log.e("Navigation", "Card ID is null, cannot navigate.")
+                    }
                 }
             }
         }

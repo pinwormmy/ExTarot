@@ -44,8 +44,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
 
                     val deck = remember { mutableStateOf(emptyList<TarotCard>()) }
-
-                    LaunchedEffect(key1 = Unit) {
+                    LaunchedEffect(Unit) {
                         deck.value = loadTarotDeck(this@MainActivity)
                     }
 
@@ -56,10 +55,8 @@ class MainActivity : ComponentActivity() {
                         composable("draw_cards_screen") { DrawCardsScreen(navController) }
                         composable("card_detail/{cardId}") { backStackEntry ->
                             val cardId = backStackEntry.arguments?.getString("cardId")?.toIntOrNull()
-
-                            // CardDetailScreen 내부에서 loadTarotDeck 함수를 호출
                             if (cardId != null) {
-                                CardDetailScreen(cardId, this@MainActivity)
+                                CardDetailScreen(cardId, deck.value)
                             } else {
                                 // cardId가 잘못되었거나 카드를 찾을 수 없을 때 처리를 여기에 추가합니다.
                             }
@@ -70,6 +67,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun MainScreen(navController: NavController) {

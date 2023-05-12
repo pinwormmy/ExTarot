@@ -1,5 +1,4 @@
-{
-  "cards": [
+[
     {
       "id": 0,
       "name": "The Fool",
@@ -390,5 +389,4 @@
       "name": "King of Cups",
       "description": "많은 돈, 성공, 끈기, 영리함"
     }
-  ]
-}
+]
