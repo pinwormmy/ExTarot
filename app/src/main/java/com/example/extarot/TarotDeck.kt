@@ -22,5 +22,5 @@ fun createTarotDeck(): List<TarotCard> {
 
 fun loadTarotDeck(context: Context): List<TarotCard> {
     val json = context.assets.open("tarot_cards.json").bufferedReader().use { it.readText() }
-    return Json.decodeFromString<List<TarotCard>>(json)
+    return Json.decodeFromString(json)
 }
