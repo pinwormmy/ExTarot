@@ -32,7 +32,7 @@ fun CardDetailScreen(cardId: Int, deck: List<TarotCard>) {
                 modifier = Modifier
                     .size(500.dp)
                     .clip(RoundedCornerShape(84.dp))
-                    .clickable { isRevealed = !isRevealed },
+                    .clickable { if (!isRevealed) isRevealed = true },
             ) {
                 if (!isRevealed) {
                     Image(
@@ -45,41 +45,37 @@ fun CardDetailScreen(cardId: Int, deck: List<TarotCard>) {
                         text = "Card ${card.id + 1}",  // 카드의 ID를 표시합니다.
                         style = MaterialTheme.typography.h4,
                         modifier = Modifier.align(Alignment.Center)
+                            .clickable { isOverlayVisible = !isOverlayVisible }
                     )
                 }
             }
 
-            if (isRevealed) {
+            if (isOverlayVisible) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.6f))
-                        .clickable { isOverlayVisible = !isOverlayVisible },
+                        .background(Color.Black.copy(alpha = 0.7f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isOverlayVisible) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = card.name,
-                                style = MaterialTheme.typography.h5,
-                                color = Color.White
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = card.description,
-                                style = MaterialTheme.typography.body1,
-                                color = Color.White
-                            )
-                        }
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = card.name,
+                            style = MaterialTheme.typography.h5,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = card.description,
+                            style = MaterialTheme.typography.body1,
+                            color = Color.White
+                        )
                     }
                 }
             }
         }
     }
 }
-
-
